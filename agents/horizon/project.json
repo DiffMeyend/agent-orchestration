@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "agents-horizon",
+  "projectType": "library",
+  "root": "agents/horizon",
+  "sourceRoot": "agents/horizon/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p agents/horizon/tsconfig.lib.json && tsc-alias -p agents/horizon/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint agents/horizon/src --ext .ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run agents/horizon --passWithNoTests"
+      }
+    }
+  },
+  "tags": ["scope:agent", "type:lib"]
+}

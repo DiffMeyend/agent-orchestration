@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "apps-mcp-runtime",
+  "projectType": "application",
+  "root": "apps/mcp-runtime",
+  "sourceRoot": "apps/mcp-runtime",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p apps/mcp-runtime/slate-runtime/tsconfig.json"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node apps/mcp-runtime/slate-runtime/src/server.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run apps/mcp-runtime/slate-runtime --passWithNoTests"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint apps/mcp-runtime/slate-runtime/src --ext .ts"
+      }
+    },
+    "vendor-kb": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p apps/mcp-runtime/servers/vendor-kb/tsconfig.json"
+      }
+    }
+  }
+}

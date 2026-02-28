@@ -1,0 +1,128 @@
+# model.yaml template for a new arc (formerly context.yaml)
+# Copy this file when creating a new arc and search/replace placeholders.
+
+ce_header:
+  id: "ARC_ID_HERE"
+  entities:
+    - type: "self"
+      id: "SELF_ID_HERE"
+    - type: "entity_type_here"
+      ids:
+        - "ENTITY_ID_1"
+        - "ENTITY_ID_2"
+  features:
+    - "FEATURE_1"
+    - "FEATURE_2"
+  tasks:
+    - "TASK_1_DESCRIPTION"
+    - "TASK_2_DESCRIPTION"
+
+context_arc:
+  id: "ARC_ID_HERE"
+  name: "ARC_NAME_HERE"
+  description: >
+    SHORT_DESCRIPTION_HERE.
+    Explain in 2–4 lines what this arc models and why it exists.
+
+  actors:
+    - id: "ACTOR_ID_1"
+      label: "Actor Label 1"
+      type: "TYPE_HERE"   # e.g., self | persona | strength | framework | environment
+      role: >
+        One or two sentences describing what this actor does in the system.
+      notes: "Optional notes or risks."
+
+    - id: "ACTOR_ID_2"
+      label: "Actor Label 2"
+      type: "TYPE_HERE"
+      role: "..."
+      notes: "..."
+
+  motives:
+    summary: >
+      High-level explanation of why this arc exists. 2–4 lines.
+    drivers:
+      - id: "DRIVER_ID_1"
+        description: "Brief description of a key driver or motivation."
+      - id: "DRIVER_ID_2"
+        description: "Another driver."
+
+  constraints:
+    - source: "SOURCE_TYPE_HERE"   # e.g., value | dbt_skill | neurotype | explicit_rule
+      label: "Constraint Name 1"
+      description: >
+        How this constraint governs behavior or usage of this arc.
+
+    - source: "SOURCE_TYPE_HERE"
+      label: "Constraint Name 2"
+      description: "..."
+
+  codes:
+    - domain: "DOMAIN_NAME_HERE"   # e.g., tech_os | strengths | dbt | archetype_personas
+      description: >
+        How this code system works for this arc.
+      examples:
+        - "EXAMPLE_TERM_1"
+        - "EXAMPLE_TERM_2"
+
+  temporality:
+    macro:
+      description: >
+        Life-stage or broader timing context for this arc.
+    micro:
+      description: >
+        How this arc shows up moment-to-moment in real life.
+      activations:
+        - trigger: "TRIGGER_DESCRIPTION"
+          mode: "MODE_OR_SUBCOMPONENT"
+          notes: "What usually happens and what should happen."
+
+  environment:
+    internal:
+      description: >
+        Description of the internal (mental/emotional) environment where this arc applies.
+    external:
+      description: >
+        Description of the external (work/home/tools) context where this arc lives.
+      key_systems:
+        - "SYSTEM_1"
+        - "SYSTEM_2"
+
+  framing:
+    primary_frame: "PRIMARY_FRAME_HERE"   # e.g., mind_as_operating_system
+    secondary_frames:
+      - "SECONDARY_FRAME_1"
+      - "SECONDARY_FRAME_2"
+    notes: >
+      Optional commentary about how this arc fits into larger models.
+
+  reference_points:
+    - axis: "AXIS_NAME_HERE"   # e.g., strengths | dbt_skills | values | neurotype
+      description: >
+        What this axis measures/organizes for this arc.
+      elements:
+        - label: "ELEMENT_LABEL_1"
+          role: "What this element represents."
+          notes: "Optional notes."
+        - label: "ELEMENT_LABEL_2"
+          role: "..."
+          notes: "..."
+
+  reflection:
+    questions:
+      - "Useful self-reflection question 1."
+      - "Useful self-reflection question 2."
+    risks:
+      - "Risk of misuse or overuse of this arc."
+      - "Another risk."
+    growth_edges:
+      - "Concrete growth edge or practice area."
+      - "Another growth edge."
+
+  implementation:
+    files:
+      - "PATH/TO/THIS/model.yaml"
+      - "OPTIONAL/RELATED/FILE.md"
+    runtime_hooks:
+      - "Describe when/where this arc should be consulted at runtime."
+      - "e.g., on_mode_switch, on_overwhelm, weekly_review."

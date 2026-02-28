@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "engines-mind",
+  "projectType": "library",
+  "root": "engines/mind",
+  "sourceRoot": "engines/mind/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p engines/mind/tsconfig.lib.json && tsc-alias -p engines/mind/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint engines/mind/src --ext .ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run engines/mind --passWithNoTests"
+      }
+    }
+  },
+  "tags": ["scope:engine", "type:lib"]
+}

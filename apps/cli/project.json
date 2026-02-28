@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "apps-cli",
+  "projectType": "application",
+  "root": "apps/cli",
+  "sourceRoot": "apps/cli/src",
+  "targets": {
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx apps/cli/src/index.ts"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint apps/cli/src --ext .ts"
+      }
+    }
+  },
+  "tags": []
+}

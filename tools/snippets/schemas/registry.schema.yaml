@@ -1,0 +1,41 @@
+$schema: "https://json-schema.org/draft-07/schema#"
+title: "MindOS Registry Entry"
+type: object
+additionalProperties: false
+required:
+  - id
+  - label
+  - kind
+properties:
+  id:
+    type: string
+    description: "Unique key for the registry entry (slug)."
+  label:
+    type: string
+    description: "Human-readable label for the entry."
+  kind:
+    type: string
+    description: "Type of item (arc, snippet_pack, operator, doc, tool)."
+  description:
+    type: string
+    description: "Brief summary of the item."
+  path:
+    type: string
+    description: "Relative path in the repository if applicable."
+  tags:
+    type: array
+    items:
+      type: string
+    description: "Free-form tags to group or search entries."
+  version:
+    type: string
+    description: "Version stamp for this entry (semver or date)."
+  last_updated:
+    type: string
+    description: "ISO timestamp of last update."
+  links:
+    type: array
+    description: "External references or related resources."
+    items:
+      type: object
+      additionalProperties: true

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "libs-context-schema",
+  "projectType": "library",
+  "root": "libs/context-schema",
+  "sourceRoot": "libs/context-schema/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p libs/context-schema/tsconfig.lib.json && tsc-alias -p libs/context-schema/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint libs/context-schema/src --ext .ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run libs/context-schema --passWithNoTests"
+      }
+    },
+    "validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm ts-node libs/context-loader/src/scripts/validate.ts"
+      }
+    }
+  },
+  "tags": []
+}

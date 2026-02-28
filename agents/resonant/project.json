@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "agents-resonant",
+  "projectType": "library",
+  "root": "agents/resonant",
+  "sourceRoot": "agents/resonant/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p agents/resonant/tsconfig.lib.json && tsc-alias -p agents/resonant/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint agents/resonant/src --ext .ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run agents/resonant --passWithNoTests"
+      }
+    }
+  },
+  "tags": ["scope:agent", "type:lib"]
+}

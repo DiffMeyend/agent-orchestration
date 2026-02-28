@@ -1,0 +1,81 @@
+$schema: "https://json-schema.org/draft-07/schema#"
+title: "MindOS Model (core/domain)"
+type: object
+additionalProperties: true
+
+required:
+  - ce_header
+  - context_arc
+
+properties:
+  ce_header:
+    type: object
+    additionalProperties: true
+    description: "Metadata about this context arc (id, version, created_by, timestamps, etc.)."
+
+  context_arc:
+    type: object
+    additionalProperties: true
+    description: "The main definition of the context arc."
+    properties:
+      id:
+        type: string
+        description: "Unique identifier for this arc, e.g. core.strengths, core.neurotype, domain.work.ascend."
+      label:
+        type: string
+        description: "Human-readable label for the arc."
+      description:
+        type: string
+        description: "Short summary of what this arc models."
+      domain:
+        type: string
+        description: "High-level domain this arc belongs to (e.g., neurotype, strengths, values, work)."
+      actors:
+        type: array
+        description: "Key actors/parts/entities in this context."
+        items:
+          anyOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+      motives:
+        description: "Core motives or drives shaping behavior here."
+        anyOf:
+          # Option 1: simple list of motives (strings or objects)
+          - type: array
+            items:
+              anyOf:
+                - type: string
+                - type: object
+                  additionalProperties: true
+          # Option 2: richer object with summary/drivers, etc.
+          - type: object
+            additionalProperties: true
+      constraints:
+        type: array
+        description: "Practical or psychological constraints in this context."
+        items:
+          anyOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+      environment:
+        type: object
+        additionalProperties: true
+        description: "Environment description: sensory, social, structural factors."
+      reference_points:
+        type: array
+        description: "Anchor concepts this arc measures against (values, strengths, rules-of-thumb)."
+        items:
+          anyOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+      reflection:
+        type: object
+        additionalProperties: true
+        description: "Reflection prompts, checklists, or journaling hooks."
+      implementation:
+        type: object
+        additionalProperties: true
+        description: "Hints for how this arc should be used at runtime (bindings to operators, tools, or rituals)."

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RuntimeState",
+  "type": "object",
+  "required": ["tag", "updatedAt"],
+  "properties": {
+    "tag": {
+      "type": "string",
+      "enum": ["#state:deep_focus", "#state:faded_focus", "#state:complex_task", "#state:simple_task"]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

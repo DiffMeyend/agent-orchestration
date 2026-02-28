@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "libs-context-loader",
+  "projectType": "library",
+  "root": "libs/context-loader",
+  "sourceRoot": "libs/context-loader/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p libs/context-loader/tsconfig.lib.json && tsc-alias -p libs/context-loader/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint libs/context-loader/src --ext .ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run libs/context-loader --passWithNoTests"
+      }
+    }
+  },
+  "tags": []
+}

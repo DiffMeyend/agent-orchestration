@@ -1,0 +1,46 @@
+{
+  "name": "mindos",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:contracts && npm run build:libs && npm run build:engines && npm run build:agents",
+    "build:contracts": "tsc -p tools/snippets/slate-contracts/tsconfig.json",
+    "build:libs": "tsc -p libs/context-schema/tsconfig.lib.json && tsc-alias -p libs/context-schema/tsconfig.lib.json && tsc -p libs/context-loader/tsconfig.lib.json && tsc-alias -p libs/context-loader/tsconfig.lib.json && tsc -p libs/orchestration/tsconfig.lib.json && tsc-alias -p libs/orchestration/tsconfig.lib.json && tsc -p libs/llm-provider/tsconfig.lib.json && tsc-alias -p libs/llm-provider/tsconfig.lib.json",
+    "build:engines": "tsc -p engines/basis/tsconfig.lib.json && tsc-alias -p engines/basis/tsconfig.lib.json && tsc -p engines/mind/tsconfig.lib.json && tsc-alias -p engines/mind/tsconfig.lib.json",
+    "build:agents": "tsc -p agents/polymath/tsconfig.lib.json && tsc-alias -p agents/polymath/tsconfig.lib.json && tsc -p agents/resonant/tsconfig.lib.json && tsc-alias -p agents/resonant/tsconfig.lib.json && tsc -p agents/architect/tsconfig.lib.json && tsc-alias -p agents/architect/tsconfig.lib.json && tsc -p agents/executor/tsconfig.lib.json && tsc-alias -p agents/executor/tsconfig.lib.json && tsc -p agents/horizon/tsconfig.lib.json && tsc-alias -p agents/horizon/tsconfig.lib.json && tsc -p agents/alchemist/tsconfig.lib.json && tsc-alias -p agents/alchemist/tsconfig.lib.json",
+    "cli": "vite-node --config vitest.config.ts apps/cli/src/index.ts",
+    "cli:status": "vite-node --config vitest.config.ts apps/cli/src/index.ts status",
+    "mcp:dev": "nx run apps-mcp-runtime:serve",
+    "mcp:build": "nx run apps-mcp-runtime:build",
+    "mcp:test": "nx run apps-mcp-runtime:test",
+    "context:validate": "nx run libs-context-schema:validate",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@nx/node": "22.4.5",
+    "@types/js-yaml": "^4.0.9",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^2.1.1",
+    "eslint": "^9.39.2",
+    "markdownlint-cli": "^0.47.0",
+    "nx": "22.4.5",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.4.5",
+    "vite-node": "^5.3.0",
+    "vite-tsconfig-paths": "^6.1.0",
+    "vitest": "^4.0.18",
+    "yaml": "^2.8.1"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0",
+    "openai": "^4.104.0",
+    "zod": "^3.23.8"
+  }
+}

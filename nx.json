@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/nx-schema.json",
+  "npmScope": "mindos",
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "useDaemonProcess": false,
+        "cacheDirectory": ".nx/cache"
+      }
+    }
+  },
+  "targetDefaults": {
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config tests/e2e/vitest.e2e.config.ts"
+      }
+    }
+  }
+}

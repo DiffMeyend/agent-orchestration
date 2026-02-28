@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "docs",
+  "projectType": "library",
+  "root": "docs",
+  "sourceRoot": "docs",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo Docs build placeholder; replace with real command"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx markdownlint \"docs/**/*.md\""
+      }
+    }
+  }
+}

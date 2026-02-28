@@ -1,0 +1,196 @@
+version: 1.3.0
+target_css: 90
+reference_doc: "../docs/css_source_of_truth.md"
+
+css_gates:
+  tier_a: 30
+  tier_b: 60
+  tier_c: 90
+runtime_modes:
+  prod:
+    description: "Production mode - strict CSS gating (Tier gates: A≥30, B≥60, C≥90)"
+
+domains:
+  evidence_strength: { weight: 35, description: "Evidence & Signals — tests + results + artifacts recorded" }
+  branch_quality:    { weight: 20, description: "Reproduction & Isolation extension — hypotheses + discriminating tests + collapse notes" }
+  symptom_specificity: { weight: 15, description: "Symptom Precision — exact error, repro path, scope, impact" }
+  environment_specificity: { weight: 10, description: "Environment — hostname, asset tag, execution context" }
+  timeline_changes:  { weight: 10, description: "Change Signals — start time, last known good, recent changes" }
+  constraints_risk:  { weight: 10, description: "Identity & Scope safety modifiers — ThreatLocker/constraints + blast radius risk" }
+
+domain_rules:
+  evidence_strength:
+    confirmed:
+      all:
+        - { path: "evidence.tests_run", op: "len_ge", value: 1 }
+        - { path: "evidence.results", op: "len_ge", value: 1 }
+        - { path: "evidence.discriminating_test", op: "not_empty" }
+    partial:
+      any:
+        - { path: "evidence.tests_run", op: "len_ge", value: 1 }
+        - { path: "evidence.results", op: "len_ge", value: 1 }
+        - { path: "evidence.artifacts.screenshots", op: "len_ge", value: 1 }
+        - { path: "evidence.artifacts.logs", op: "len_ge", value: 1 }
+        - { path: "evidence.artifacts.error_codes", op: "len_ge", value: 1 }
+    notes: "Record every Tier-A test + result; without logs/tests this domain stays UNKNOWN."
+
+  branch_quality:
+    confirmed:
+      all:
+        - { path: "branches.active_hypotheses", op: "len_ge", value: 1 }
+        - { path: "branches.current_best_guess", op: "not_empty" }
+        - { path: "plan.best_branch_collapse_test", op: "not_empty" }
+    partial:
+      any:
+        - { path: "branches.active_hypotheses", op: "len_ge", value: 1 }
+        - { path: "branches.current_best_guess", op: "not_empty" }
+        - { path: "plan.next_3_actions", op: "len_ge", value: 1 }
+    notes: "Confirmed requires an articulated best guess plus a discriminating collapse plan."
+
+  symptom_specificity:
+    confirmed:
+      all:
+        - { path: "problem.symptoms", op: "len_ge", value: 1 }
+        - { path: "problem.impact.who", op: "not_empty" }
+        - { path: "problem.impact.how_bad", op: "not_empty" }
+        - { path: "problem.scope.single_user", op: "not_null" }
+        - { path: "problem.scope.multi_user", op: "not_null" }
+        - { path: "problem.scope.single_device", op: "not_null" }
+        - { path: "problem.scope.service_wide", op: "not_null" }
+    partial:
+      any:
+        - { path: "problem.symptoms", op: "len_ge", value: 1 }
+        - { path: "problem.impact.who", op: "not_empty" }
+        - { path: "problem.impact.how_bad", op: "not_empty" }
+        - { path: "problem.scope.single_user", op: "not_null" }
+        - { path: "problem.scope.multi_user", op: "not_null" }
+        - { path: "problem.scope.single_device", op: "not_null" }
+        - { path: "problem.scope.service_wide", op: "not_null" }
+    notes: "Precision requires symptoms + impact + scope signals; vague tickets stay UNKNOWN."
+
+  environment_specificity:
+    confirmed:
+      all:
+        - { path: "environment.target_device.hostname", op: "not_empty" }
+        - { path: "environment.target_device.asset_tag", op: "not_empty" }
+        - { path: "environment.target_device.os", op: "not_empty" }
+        - { path: "environment.user_context.username", op: "not_empty" }
+    partial:
+      any:
+        - { path: "environment.target_device.hostname", op: "not_empty" }
+        - { path: "environment.target_device.asset_tag", op: "not_empty" }
+        - { path: "environment.target_device.serial_number", op: "not_empty" }
+        - { path: "environment.user_context.username", op: "not_empty" }
+        - { path: "environment.network.connection_type", op: "not_empty" }
+    notes: "Need host identity plus owner/context; asset tag required for confirmed."
+
+  timeline_changes:
+    confirmed:
+      all:
+        - { path: "problem.start_time", op: "not_empty" }
+        - { path: "problem.last_known_good", op: "not_empty" }
+        - { path: "problem.recent_changes", op: "len_ge", value: 1 }
+    partial:
+      any:
+        - { path: "problem.start_time", op: "not_empty" }
+        - { path: "problem.last_known_good", op: "not_empty" }
+        - { path: "problem.recent_changes", op: "len_ge", value: 1 }
+    notes: "Must capture onset, LKG, and at least one change driver for confirmed."
+
+  constraints_risk:
+    confirmed:
+      all:
+        - { path: "constraints.cannot_reboot", op: "not_null" }
+        - { path: "constraints.cannot_disconnect", op: "not_null" }
+        - { path: "constraints.change_freeze", op: "not_null" }
+        - { path: "constraints.security_sensitivity", op: "not_empty" }
+        - { path: "constraints.security_controls.threatlocker_present", op: "not_null" }
+        - { path: "constraints.security_controls.threatlocker_notes", op: "not_empty" }
+    partial:
+      any:
+        - { path: "constraints.cannot_reboot", op: "not_null" }
+        - { path: "constraints.cannot_disconnect", op: "not_null" }
+        - { path: "constraints.change_freeze", op: "not_null" }
+        - { path: "constraints.security_sensitivity", op: "not_empty" }
+        - { path: "constraints.security_controls.threatlocker_present", op: "not_null" }
+        - { path: "constraints.security_controls.threatlocker_notes", op: "not_empty" }
+    notes: "Document all safety constraints + ThreatLocker posture to unlock full credit."
+
+hard_caps:
+  - id: missing_hostname
+    condition:
+      any:
+        - { path: "environment.target_device.hostname", op: "empty" }
+    cap: 70
+    reason: "No target hostname defined."
+
+  - id: no_tests
+    condition:
+      all:
+        - { path: "evidence.tests_run", op: "len_eq", value: 0 }
+        - { path: "evidence.results", op: "len_eq", value: 0 }
+    cap: 80
+    reason: "No tests/results recorded."
+
+  - id: best_guess_no_tests
+    condition:
+      all:
+        - { path: "branches.current_best_guess", op: "not_empty" }
+        - { path: "evidence.tests_run", op: "len_eq", value: 0 }
+    cap: 88
+    reason: "Best guess without any test recorded."
+
+  - id: work_stopped_unknown
+    condition:
+      any:
+        - { path: "problem.impact.work_stopped", op: "is_null" }
+    cap: 85
+    reason: "Impact not known (work_stopped is null)."
+
+  - id: asset_not_identified
+    condition:
+      all:
+        - { path: "environment.target_device.asset_tag", op: "empty" }
+        - { path: "environment.target_device.serial_number", op: "empty" }
+    cap: 80
+    reason: "Device asset tag / serial not documented."
+
+hard_cap_policy:
+  evaluation: "evaluate_all"
+  resolution: "lowest_cap"
+  apply_before_penalties: true
+
+penalties:
+  contradiction:
+    default: 6
+    severe: 10
+    per_conflict: 3
+    max_penalty: 8
+    triggers:
+      - "Conflicting impact statements (e.g., work_stopped true vs false)."
+      - "Environment fields asserting mutually exclusive scopes without explanation."
+  unverified_assumption:
+    default: 2
+    triggers:
+      - "Best guess recorded without tests/results supporting it."
+
+required_evidence_for_css_ge_90:
+  must_have:
+    - { path: "ticket.priority", op: "not_equals", value: "UNKNOWN" }
+    - { path: "environment.target_device.hostname", op: "not_empty" }
+    - { path: "environment.target_device.asset_tag", op: "not_empty" }
+    - { path: "problem.symptoms", op: "len_ge", value: 1 }
+    - { path: "problem.impact.work_stopped", op: "not_null" }
+    - { path: "evidence.tests_run", op: "len_ge", value: 1 }
+    - { path: "evidence.results", op: "len_ge", value: 1 }
+    - { path: "evidence.discriminating_test", op: "not_empty" }
+    - { path: "branches.active_hypotheses", op: "len_ge", value: 1 }
+    - { path: "branches.current_best_guess", op: "not_empty" }
+    - { path: "ticket.requester.masked", op: "not_empty" }
+    - { path: "ticket.requester.phone_masked", op: "not_empty" }
+    - { path: "ticket.requester.email_masked", op: "not_empty" }
+
+dashboard_config:
+  show_top_n_blockers: 3
+  show_quick_wins: true
+  collapse_if_css_above: 85

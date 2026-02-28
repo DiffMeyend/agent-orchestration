@@ -1,0 +1,20 @@
+{
+  "name": "slate-runtime",
+  "version": "0.0.1",
+  "description": "Slate MCP Runtime for state, snippets, and logs",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc -p ./",
+    "dev": "tsx src/server.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "slate-contracts": "file:../../tools/slate-contracts",
+    "yaml": "^2.5.1"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "engines-basis",
+  "projectType": "library",
+  "root": "engines/basis",
+  "sourceRoot": "engines/basis/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p engines/basis/tsconfig.lib.json && tsc-alias -p engines/basis/tsconfig.lib.json"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint engines/basis/src --ext .ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run engines/basis --passWithNoTests"
+      }
+    }
+  },
+  "tags": ["scope:engine", "type:lib"]
+}

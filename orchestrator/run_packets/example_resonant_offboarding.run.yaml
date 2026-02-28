@@ -1,0 +1,18 @@
+# example run packet (for Codex / your orchestrator)
+origin: "Decide.Command.deep_focus"
+command: "Resonant.Research.Report"
+options:
+  voice: "quiet"
+  format: "markdown"
+  autonomy: "L0"
+input:
+  title: "Automate Intune device retire + mailbox archive"
+  description: >
+    We want to design an automation flow for standard offboarding:
+    - Retire Intune device (Windows)
+    - Archive mailbox
+    - Disable accounts
+    - Clean up licenses
+  context_sources:
+    - "ticket:12345"
+    - "kb:offboarding-standard"

@@ -1,0 +1,60 @@
+MindOS.code-workspace
+
+# VS Code scratch
+.vscode/Scratch
+MeyendArcs.md
+domain/home/calendar
+domain/home/food
+Scratch.md.lock
+# Slate build artifacts
+.vscode/extensions/slate-vscode/node_modules/
+.vscode/extensions/slate-vscode/out/
+.vscode/extensions/slate-vscode/package-lock.json
+mcp/slate-runtime/node_modules/
+mcp/slate-runtime/dist/
+mcp/slate-runtime/package-lock.json
+tools/slate-contracts/node_modules/
+tools/slate-contracts/dist/
+tools/slate-contracts/package-lock.json
+tools/slate-contracts/src/*.js
+tools/slate-contracts/src/*.js.map
+tools/snippets/slate-contracts/node_modules/
+tools/snippets/slate-contracts/dist/
+Scratch.md
+GPT Build Checklist.md
+personal todo.md
+node_modules
+
+# Nx cache
+.nx/
+
+# Local caches & venvs
+.cache/
+.venv/
+.DS_Store
+
+# Nx cache
+.nx/
+
+# Build output
+dist/
+
+# Environment files (API keys, secrets)
+.env
+.env.*
+!.env.example
+
+# Session persistence (runtime-generated)
+sessions/
+
+# Private: personal identity layer (values, strengths, neurotype, operator arcs)
+context/
+
+# Private: personal axioms and identity frameworks
+tools/snippets/MindOS-*.json
+
+# Private: CEQ weighting heuristics and tuning details
+docs/Resonant Whitepaper Plan.md
+
+# Private: domain-specific scoring calibrations
+engines/basis/config/css_scoring.yaml

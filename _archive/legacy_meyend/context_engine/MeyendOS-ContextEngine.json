@@ -1,0 +1,20 @@
+// STATUS: ARCHIVED. Superseded by agent-based context_packet + brief pipeline.
+{
+    "version": 7,
+    "folders": [
+        {
+            "name": "MindOS\\Context\\Engine",
+            "info": "SCAN → FRAME → LEVERAGE ritual prompts",
+            "app": "TEXT",
+            "snippets": [
+                {
+                    "name": "MindOS – Context Engine Loop",
+                    "shortcut": "/mOS.context_engine",
+                    "type": "html",
+                    "text": "MindOS – Context Engine Loop\n\nSwitch (Quiet/Verbose): {formmenu: default=Quiet; Quiet; Verbose; name=Switch}\nPersona running the pass: {formmenu: default=Alchemist; Alchemist; Resonant; Architect; Executor; Horizon; name=Persona}\nTimebox (mins): {formtext: default=10; width=80}\n\nSCAN – What’s the scene?\n- Actors & Agents: {formparagraph: width=600}\n- Goals & Intentions: {formparagraph: width=600}\n- Constraints & Rules: {formparagraph: width=600}\n- Environment / Temporal boundaries: {formparagraph: width=600}\n- Meaning layers (symbols, social cues, co-text): {formparagraph: width=600}\n- Mental models (belief vs. reality): {formparagraph: width=600}\n\nFRAME – Which lens keeps this stable?\n- Frames of reference under consideration: {formparagraph: width=600}\n- Reference points / anchors: {formparagraph: width=600}\n- Common ground + fragmentation risks: {formparagraph: width=600}\n- Relevance filter (signals worth tracking): {formparagraph: width=600}\n- Stabilization plan: {formparagraph: width=600}\n\nLEVERAGE – What move matters now?\n- Desired outcome (in-frame): {formparagraph: width=600}\n- Feasibility check (constraints vs. levers): {formparagraph: width=600}\n- Environment inputs you can tweak: {formparagraph: width=600}\n- Chosen action / operator / tool: {formparagraph: width=600}\n- Hand-off notes (intent_label, next persona): {formparagraph: width=600}\n\nClose / Next Loop\n- Context packet or history updates: {formparagraph: width=600}\n- Do you need another pass? {formmenu: default=No; No; Yes; name=AnotherPass}\n",
+                    "html": "<p>MindOS – Context Engine Loop<br/><br/>Switch (Quiet/Verbose): {formmenu: default=Quiet; Quiet; Verbose; name=Switch}<br/>Persona running the pass: {formmenu: default=Alchemist; Alchemist; Resonant; Architect; Executor; Horizon; name=Persona}<br/>Timebox (mins): {formtext: default=10; width=80}<br/><br/>SCAN – What’s the scene?<br/>- Actors &amp; Agents: {formparagraph: width=600}<br/>- Goals &amp; Intentions: {formparagraph: width=600}<br/>- Constraints &amp; Rules: {formparagraph: width=600}<br/>- Environment / Temporal boundaries: {formparagraph: width=600}<br/>- Meaning layers (symbols, social cues, co-text): {formparagraph: width=600}<br/>- Mental models (belief vs. reality): {formparagraph: width=600}<br/><br/>FRAME – Which lens keeps this stable?<br/>- Frames of reference under consideration: {formparagraph: width=600}<br/>- Reference points / anchors: {formparagraph: width=600}<br/>- Common ground + fragmentation risks: {formparagraph: width=600}<br/>- Relevance filter (signals worth tracking): {formparagraph: width=600}<br/>- Stabilization plan: {formparagraph: width=600}<br/><br/>LEVERAGE – What move matters now?<br/>- Desired outcome (in-frame): {formparagraph: width=600}<br/>- Feasibility check (constraints vs. levers): {formparagraph: width=600}<br/>- Environment inputs you can tweak: {formparagraph: width=600}<br/>- Chosen action / operator / tool: {formparagraph: width=600}<br/>- Hand-off notes (intent_label, next persona): {formparagraph: width=600}<br/><br/>Close / Next Loop<br/>- Context packet or history updates: {formparagraph: width=600}<br/>- Do you need another pass? {formmenu: default=No; No; Yes; name=AnotherPass}<br/></p>"
+                }
+            ]
+        }
+    ]
+}

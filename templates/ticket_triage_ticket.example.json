@@ -1,0 +1,15 @@
+{
+  "ticket_id": "TICKET-12345",
+  "title": "Laptop fan running at max RPM",
+  "description": "User reports Dell Latitude fan is running loudly immediately after login. CPU usage fluctuates between 5-10%. They recently installed a preview build of Teams.",
+  "requester": "alex.smith@sampleco.com",
+  "source": "PSA",
+  "created_at": "2025-11-29T09:42:00-08:00",
+  "tags": ["hardware", "noise", "priority:medium"],
+  "attachments": [
+    {
+      "type": "screenshot",
+      "description": "Task Manager showing low CPU usage"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/main/packages/nx/schemas/project-schema.json",
+  "name": "scripts",
+  "projectType": "library",
+  "root": "scripts",
+  "sourceRoot": "scripts",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ESLINT_USE_FLAT_CONFIG=false eslint scripts --ext .ts,.js,.mjs"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run scripts --passWithNoTests"
+      }
+    },
+    "run:rotate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pwsh -File scripts/rotate_context_to_history.ps1",
+        "parallel": false
+      }
+    }
+  }
+}

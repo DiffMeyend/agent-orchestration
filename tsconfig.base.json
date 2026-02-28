@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "slate-contracts": ["tools/snippets/slate-contracts/src/index.ts"],
+      "@slate/context-schema": ["libs/context-schema/src/index.ts"],
+      "@slate/context-loader": ["libs/context-loader/src/index.ts"],
+      "@slate/orchestration": ["libs/orchestration/src/index.ts"],
+      "@slate/llm-provider": ["libs/llm-provider/src/index.ts"],
+      "@slate/basis": ["engines/basis/src/index.ts"],
+      "@slate/mind": ["engines/mind/src/index.ts"],
+      "@slate/polymath": ["agents/polymath/src/index.ts"],
+      "@slate/executor": ["agents/executor/src/index.ts"],
+      "@slate/horizon": ["agents/horizon/src/index.ts"],
+      "@slate/resonant": ["agents/resonant/src/index.ts"],
+      "@slate/architect": ["agents/architect/src/index.ts"],
+      "@slate/alchemist": ["agents/alchemist/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

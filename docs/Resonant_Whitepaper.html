@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resonant — Trust Infrastructure for Multi-Agent Systems</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+  :root {
+    --black:   #000000;
+    --magenta: #FF00FF;
+    --lime:    #00FF41;
+    --dim-mag: #CC00CC;
+    --dim-lime:#00CC33;
+    --faint:   #1A001A;
+    --scanline: rgba(0,255,65,0.03);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--magenta);
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* CRT scanline overlay */
+  body::before {
+    content: '';
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      var(--scanline) 0px,
+      var(--scanline) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    z-index: 9999;
+  }
+
+  /* Subtle phosphor glow on text */
+  body { text-shadow: 0 0 8px rgba(255,0,255,0.35); }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    text-align: center;
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--dim-mag);
+    margin-bottom: 80px;
+  }
+
+  .cover-title {
+    font-family: 'VT323', monospace;
+    font-size: 96px;
+    color: var(--lime);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 20px rgba(0,255,65,0.6), 0 0 60px rgba(0,255,65,0.2);
+    line-height: 1;
+    margin-bottom: 24px;
+    animation: flicker 8s infinite;
+  }
+
+  @keyframes flicker {
+    0%,95%,97%,100% { opacity: 1; }
+    96% { opacity: 0.85; }
+  }
+
+  .cover-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    color: var(--dim-mag);
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .cover-meta {
+    font-size: 12px;
+    color: #660066;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 24px;
+  }
+
+  /* ── Navigation ── */
+  .toc {
+    background: var(--faint);
+    border: 1px solid #330033;
+    border-left: 3px solid var(--lime);
+    padding: 28px 32px;
+    margin-bottom: 72px;
+    font-size: 13px;
+  }
+
+  .toc-title {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: var(--lime);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    text-shadow: 0 0 10px rgba(0,255,65,0.4);
+  }
+
+  .toc a {
+    display: block;
+    color: var(--dim-mag);
+    text-decoration: none;
+    padding: 3px 0;
+    transition: color 0.15s;
+  }
+
+  .toc a:hover { color: var(--lime); }
+
+  .toc .toc-sub { padding-left: 20px; font-size: 12px; color: #880088; }
+  .toc .toc-sub:hover { color: var(--lime); }
+
+  /* ── Section headings ── */
+  h1 {
+    font-family: 'VT323', monospace;
+    font-size: 48px;
+    color: var(--lime);
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+    margin: 72px 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #003310;
+    text-shadow: 0 0 16px rgba(0,255,65,0.5);
+  }
+
+  h2 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    color: var(--lime);
+    letter-spacing: 0.05em;
+    margin: 48px 0 14px;
+    text-shadow: 0 0 8px rgba(0,255,65,0.3);
+  }
+
+  h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    color: var(--dim-lime);
+    letter-spacing: 0.04em;
+    margin: 36px 0 10px;
+    text-transform: uppercase;
+  }
+
+  /* ── Body text ── */
+  p {
+    margin-bottom: 18px;
+    color: var(--magenta);
+  }
+
+  /* ── Callout ── */
+  .callout {
+    border-left: 3px solid var(--lime);
+    background: #001a00;
+    color: var(--lime);
+    font-family: 'Space Mono', monospace;
+    font-style: italic;
+    padding: 18px 24px;
+    margin: 28px 0;
+    text-shadow: 0 0 8px rgba(0,255,65,0.4);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── Lists ── */
+  ul {
+    list-style: none;
+    margin: 0 0 18px 0;
+    padding: 0;
+  }
+
+  ul li {
+    padding: 5px 0 5px 24px;
+    position: relative;
+    color: var(--magenta);
+  }
+
+  ul li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--dim-lime);
+  }
+
+  ul li strong {
+    color: var(--lime);
+    font-weight: 700;
+  }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0 32px;
+    border: 1px solid #330033;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+  }
+
+  th {
+    background: #0a000a;
+    color: var(--lime);
+    border: 1px solid #330033;
+    padding: 10px 14px;
+    text-align: left;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 6px rgba(0,255,65,0.3);
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  td {
+    border: 1px solid #220022;
+    padding: 9px 14px;
+    color: var(--magenta);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  tr:nth-child(even) td { background: #0a000a; }
+
+  /* ── Code / formula ── */
+  .formula {
+    font-family: 'VT323', monospace;
+    font-size: 26px;
+    color: var(--lime);
+    text-align: center;
+    padding: 16px;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 12px rgba(0,255,65,0.5);
+  }
+
+  /* ── Page break simulation ── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid #1a001a;
+    margin: 64px 0 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 100px;
+    padding-top: 32px;
+    border-top: 1px solid #220022;
+    font-size: 11px;
+    color: #440044;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: #330033; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--dim-mag); }
+
+  /* ── Print ── */
+  @media print {
+    body::before { display: none; }
+    .cover-title { animation: none; }
+    .toc { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-title">RESONANT</div>
+    <div class="cover-subtitle">Trust Infrastructure for Multi-Agent Systems</div>
+    <div class="cover-meta">Internal Design Canon &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; Confidential</div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">// TABLE OF CONTENTS</div>
+    <a href="#s1">1. The Trust Problem</a>
+    <a href="#s2">2. Equilibrium as the Right Frame</a>
+    <a href="#s3">3. The Sound Engineer</a>
+    <a href="#s4">4. Architecture</a>
+    <a class="toc-sub" href="#s4-1">4.1 Modules</a>
+    <a class="toc-sub" href="#s4-2">4.2 The Channel Map</a>
+    <a class="toc-sub" href="#s4-3">4.3 The EQ Engine</a>
+    <a class="toc-sub" href="#s4-4">4.4 The Pipeline</a>
+    <a href="#s5">5. Context Equilibrium (CEQ)</a>
+    <a class="toc-sub" href="#s5-1">5.1 Formula</a>
+    <a class="toc-sub" href="#s5-2">5.2 Weighting Heuristics</a>
+    <a class="toc-sub" href="#s5-3">5.3 Bands</a>
+    <a class="toc-sub" href="#s5-4">5.4 Calibration Loop</a>
+    <a href="#s6">6. Context Matrix</a>
+    <a class="toc-sub" href="#s6-1">6.1 Prompt Weights</a>
+    <a class="toc-sub" href="#s6-2">6.2 Fidelity by Module</a>
+    <a href="#s7">7. Arc, Payload, and Slate</a>
+    <a class="toc-sub" href="#s7-1">7.1 Context Payload</a>
+    <a class="toc-sub" href="#s7-2">7.2 Context Slate</a>
+    <a class="toc-sub" href="#s7-3">7.3 Equilibrium Interventions</a>
+    <a href="#s8">8. Autonomy as CEQ-Derived</a>
+    <a href="#s9">9. Failure Modes</a>
+    <a href="#s10">10. Open Questions</a>
+    <a href="#s11">11. Quick Reference</a>
+  </nav>
+
+  <!-- SECTION 1 -->
+  <section id="s1">
+    <h1>1. The Trust Problem</h1>
+    <p>Multi-agent systems do not have a coordination problem. They have a trust problem. The distinction matters because it determines what you build.</p>
+    <p>Coordination implies that agents are in the right place, ready to act, and just need clearer directions. Trust implies something deeper: that you cannot take an agent's output at face value simply because it arrived in the expected schema. A well-formed response is not the same as a true one. A completed handoff is not the same as a coherent one.</p>
+    <p>The current default in almost every multi-agent system is what we call trust by convention. Agents return outputs that match a schema, so downstream consumers assume the work was done correctly. This is type-checking. It is not trust.</p>
+    <div class="callout">The question we are actually trying to answer is: how do we know the system did what it said it did—and how much should we rely on its current state?</div>
+    <p>This question is not answerable through verification alone. You cannot audit your way to trust in a system where the number of interacting variables exceeds any human's ability to track. The combinatorial surface of a live multi-agent execution—operator state, task complexity, agent confidence, context coverage, inter-module dependencies, time constraints—cannot be reduced to a checklist.</p>
+    <p>What you can do is instrument the system to understand its own state continuously, score that state honestly, and let the score govern what the system is allowed to do next. This is the function Resonant performs.</p>
+    <p>Resonant is not an agent. It does not perform tasks. It is the trust accounting layer: the part of the system that knows, at any moment, how much to believe the system's current state—and acts on that knowledge.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 2 -->
+  <section id="s2">
+    <h1>2. Equilibrium as the Right Frame</h1>
+    <p>The instinct when building reliable systems is to reach for determinism. If outputs are reproducible, behaviour is auditable, and state is fully specified, we feel we have solved the problem. This instinct is correct at small scale and wrong at large scale.</p>
+    <p>Determinism becomes more elusive as variables increase. This is not a temporary engineering limitation to be solved with better tooling. It is a structural property of complex systems. Every variable you add to a system multiplies the number of states that system can inhabit. Beyond a certain threshold, the state space is not enumerable, and determinism as a goal produces systems that are brittle—optimized for conditions that never quite hold in production.</p>
+    <div class="callout">Equilibrium is not a consolation prize for failing to achieve determinism. It is the correct engineering target for complex systems.</div>
+    <p>A system in equilibrium is not static. It is a system that understands the forces acting on it and compensates actively. The score it maintains is not a measure of perfection; it is a measure of how well the system understands its own current state. A score of 85 does not mean the system has verified 85% of its outputs. It means the system has high confidence in its ability to reason about what has happened and what should happen next.</p>
+    <p>This reframe has practical consequences. It means we do not try to eliminate variance; we measure it. We do not try to guarantee outputs; we calibrate autonomy to the current trust level. We do not treat failure as an error to be suppressed; we treat it as information to be structured and preserved.</p>
+    <p>Equilibrium thinking produces different architecture than determinism thinking. Instead of checkpoints that block execution until conditions are met, you get a continuous signal that modulates what the system does. Instead of pass/fail validation, you get a live score that moves with the work. Instead of a binary audit trail, you get a structured artifact from every outcome—successful or not.</p>
+    <p>Resonant is built on this frame. Everything that follows—the CEQ score, the EQ Engine, the Context Slate—is a mechanical expression of the equilibrium model.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 3 -->
+  <section id="s3">
+    <h1>3. The Sound Engineer</h1>
+    <p>The metaphor that organises Resonant's design is the sound engineer mixing a live performance.</p>
+    <p>A live performance involves many performers playing simultaneously. Each has their own instrument, their own timing, their own relationship to the song. The sound engineer does not play an instrument. Their job is not to perform but to maintain resonance across all channels so that the combined output is coherent and captivating.</p>
+    <p>To do this, the engineer listens to everything at once. They adjust levels when one channel overpowers another. They apply EQ when a frequency range is muddying the mix. They compress dynamics when a performer swells too aggressively. They do all of this continuously, in real time, based on how the song is moving, what the instrumentation is doing, what the venue's acoustics are adding, and what the crowd is responding to.</p>
+    <div class="callout">The sound engineer does not stop the performance to verify that each musician is playing correctly. They maintain the conditions under which good performance remains possible.</div>
+    <p>This is exactly the role Resonant plays. The agents—POLYMATH, ALCHEMIST, ARCHITECT, EXECUTOR, HORIZON—are the performers. BASIS and MIND are the acoustic environment: one reading the venue, one reading the performer state. Resonant sits at the mixing board, listening to every channel simultaneously, adjusting the system's behaviour in real time based on what it hears.</p>
+    <p>The variables that affect the mix:</p>
+    <ul>
+      <li>The <strong>song</strong> is the task type, complexity, and stakes.</li>
+      <li>The <strong>instrumentation</strong> is the set of active agents and their current states.</li>
+      <li>The <strong>venue</strong> is the structural clarity of the context environment (measured by BASIS).</li>
+      <li>The <strong>performer</strong> is the operator's current cognitive state (measured by MIND).</li>
+      <li>The <strong>crowd</strong> is urgency and stakeholder pressure.</li>
+    </ul>
+    <p>A great sound engineer does not make the performance deterministic. They maintain something listenable within irreducible chaos, compensating in real time because they understand the relationships between channels—not because they have eliminated variance. Resonant's design aspires to exactly this.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 4 -->
+  <section id="s4">
+    <h1>4. Architecture</h1>
+    <p>Resonant's architecture is the mechanical expression of the equilibrium frame. Every structural decision traces back to a specific trust accounting need.</p>
+
+    <h2 id="s4-1">4.1 Modules</h2>
+    <p>Every agent in the system operates through a Module. A Module is not the agent itself; it is the structured container the agent maintains as it works. Each Module carries the agent's current artifact, its confidence level, coherence signals it has observed, and—critically—a Module Spec.</p>
+    <p>A Module Spec is a trust contract. It declares what the agent requires as input, what it promises as output, what assumptions it is making, and what dependencies it is relying on. Module Specs are the mechanism by which Resonant can validate handoffs without inspecting the content of every output in detail. If an agent's Module Spec says it requires Exact fidelity on Bounds and the upstream module has only delivered Directional, Resonant can catch the mismatch before it propagates.</p>
+
+    <h2 id="s4-2">4.2 The Channel Map</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Channel</th><th>Module Type</th><th>Responsibility</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>BASIS</td><td>Context Module</td><td>Reads the venue: Context Matrix coverage, clarity, CEQ structural input.</td></tr>
+          <tr><td>MIND</td><td>Context Module</td><td>Reads the performer: operator capacity, fatigue, context-switching, CEQ operational input.</td></tr>
+          <tr><td>POLYMATH</td><td>Execution Module</td><td>Exploration and divergent research.</td></tr>
+          <tr><td>ALCHEMIST</td><td>Execution Module</td><td>Transformation and creative synthesis.</td></tr>
+          <tr><td>ARCHITECT</td><td>Execution Module</td><td>Design and convergent planning.</td></tr>
+          <tr><td>EXECUTOR</td><td>Execution Module</td><td>Implementation in worktree-isolated execution.</td></tr>
+          <tr><td>HORIZON</td><td>Execution Module</td><td>Review, ship decision, and acceptance.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Context Modules (BASIS, MIND) run continuously and stream telemetry into the EQ Engine. They are not sequential steps; they are persistent channels that remain open for the duration of any active execution. Execution Modules (POLYMATH through HORIZON) run in sequence, each tending its Module, publishing its Module Spec, and handing off to the next.</p>
+
+    <h2 id="s4-3">4.3 The EQ Engine</h2>
+    <p>The EQ Engine is the core of Resonant. It runs a continuous four-phase loop:</p>
+    <ul>
+      <li><strong>Listen.</strong> Ingest BASIS/MIND telemetry streams, consume Module outputs as they arrive, and read Module Specs for the current Arc.</li>
+      <li><strong>Calibrate.</strong> Recompute the Context Equilibrium (CEQ) score from its three components: structural, operational, and coherence. Evaluate whether the score has crossed a band threshold.</li>
+      <li><strong>Stabilize.</strong> If the CEQ score has fallen outside tolerance, determine the appropriate intervention: feedback to an agent, autonomy reduction, halt and checkpoint, or resequencing.</li>
+      <li><strong>Relay.</strong> Broadcast EQ Directives to affected Modules and update the Context Arc's equilibrium history.</li>
+    </ul>
+    <p>The engine does not wait for agents to finish before evaluating. It listens continuously and can interrupt execution if the trust score deteriorates beyond the threshold for the current band.</p>
+
+    <h2 id="s4-4">4.4 The Pipeline</h2>
+    <p>Execution flows POLYMATH → ALCHEMIST → ARCHITECT → EXECUTOR → HORIZON. Each agent tends its Module and publishes a Module Spec before handing off. Resonant validates each handoff against the receiving agent's Module Spec requirements. The EQ Engine runs throughout, with BASIS and MIND providing continuous environmental and operator signals.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 5 -->
+  <section id="s5">
+    <h1>5. Context Equilibrium (CEQ)</h1>
+    <p>CEQ is the live trust score. It is a single number between 0 and 100 that represents how much confidence the system has in its own current state. A higher score means Resonant understands the system's state well enough to allow greater autonomy. A lower score means uncertainty has accumulated to the point where human intervention or constrained operation is warranted.</p>
+
+    <h2 id="s5-1">5.1 Formula</h2>
+    <div class="formula">CEQ = α · CEQ_structural + β · CEQ_operational + γ · CEQ_coherence</div>
+    <p>The three components:</p>
+    <ul>
+      <li><strong>CEQ_structural</strong> measures the quality of the context environment. It is driven by BASIS: how completely the Context Matrix is populated, how fresh each prompt's information is, and whether any contradictions have been flagged.</li>
+      <li><strong>CEQ_operational</strong> measures the state of the human operator. It is driven by MIND: cognitive load, fatigue signals, context-switching frequency, and availability.</li>
+      <li><strong>CEQ_coherence</strong> measures the internal consistency of the active Modules. It is computed from Module Spec compatibility across handoffs, dependency satisfaction, and drift between what agents promised and what they delivered.</li>
+    </ul>
+
+    <h2 id="s5-2">5.2 Weighting Heuristics</h2>
+    <p>The weights α, β, and γ are not fixed. They shift based on which Execution Modules are active, reflecting the trust priorities appropriate to each phase of work.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>α (structural)</th><th>β (operational)</th><th>γ (coherence)</th><th>Rationale</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Early exploration (POLYMATH)</td><td>~0.40</td><td>~0.35</td><td>~0.25</td><td>Unanswered context questions suppress CEQ even when the operator is energised.</td></tr>
+          <tr><td>Transformation (ALCHEMIST)</td><td>~0.35</td><td>~0.30</td><td>~0.35</td><td>Balance shifts as synthesis depends on both context fidelity and module alignment.</td></tr>
+          <tr><td>Design (ARCHITECT)</td><td>~0.30</td><td>~0.25</td><td>~0.45</td><td>Convergent planning requires high coherence; structural fidelity should be settled by this phase.</td></tr>
+          <tr><td>Implementation (EXECUTOR)</td><td>~0.25</td><td>~0.30</td><td>≥0.45</td><td>Misalignment between ARCHITECT and EXECUTOR must be caught immediately.</td></tr>
+          <tr><td>Delivery-critical (HORIZON)</td><td>~0.25</td><td>≥0.35</td><td>~0.40</td><td>Fatigue or context switching at delivery clamps autonomy early.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>These heuristics are defined but require live validation. The calibration loop (described in Section 5.4) is the mechanism by which they are tuned over time.</p>
+
+    <h2 id="s5-3">5.3 Bands</h2>
+    <p>CEQ scores map to four bands. Bands determine what interventions the EQ Engine may apply and what level of autonomy Execution Modules may exercise.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Band</th><th>Score Range</th><th>Permitted Autonomy &amp; Response</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stable</td><td>80–100</td><td>Full autonomy within Module Spec parameters. EQ Engine in observe mode.</td></tr>
+          <tr><td>Watch</td><td>60–79</td><td>Autonomy continues with enhanced monitoring. EQ Engine may issue feedback directives.</td></tr>
+          <tr><td>Constrain</td><td>40–59</td><td>Autonomy reduced. Downstream Module parameters tightened. Operator notified.</td></tr>
+          <tr><td>Pause</td><td>&lt;40</td><td>Execution halted. Operator checkpoint required before resuming.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Band transitions include hysteresis—a score must remain above a threshold for a minimum period before autonomy is expanded. This prevents oscillation when the system is near a boundary.</p>
+
+    <h2 id="s5-4">5.4 Calibration Loop</h2>
+    <p>The weights and band thresholds are not permanent fixtures. They are updated through a calibration loop:</p>
+    <ul>
+      <li>CEQ component histories and Payload/Slate outcomes are captured for each completed execution.</li>
+      <li>Regression and classification analysis identifies which component weightings best predicted good outcomes for each execution mode.</li>
+      <li>Updated weights and band thresholds are proposed. Surfaced diffs require operator approval before taking effect.</li>
+      <li>Operators may override the weighting policy at runtime (for example, 'optimise for speed' or 'optimise for insight'). These overrides are logged and fed back into the calibration model.</li>
+    </ul>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 6 -->
+  <section id="s6">
+    <h1>6. Context Matrix</h1>
+    <p>The Context Matrix is the structured representation of what Resonant knows about the task environment. BASIS is responsible for populating and maintaining it. Each of the ten context prompts—Actors, Motivation, Bounds, Frame, Constraints, Temporality, Location, Anchors, Semiotics, Environment—is tracked at one of four fidelity levels: Unknown, Directional, Detailed, or Exact.</p>
+    <p>Fidelity requirements vary by Execution Module. What POLYMATH needs to begin exploration (Directional on most prompts) is far less than what EXECUTOR needs to begin implementation (Exact on most prompts). The matrix encodes these expectations explicitly, allowing the EQ Engine to detect when an agent is proceeding on thinner context than its work requires.</p>
+
+    <h2 id="s6-1">6.1 Prompt Weights</h2>
+    <p>Not all prompts contribute equally to CEQ_structural. The weights reflect how much ambiguity in each prompt can propagate into systemic problems.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Prompt</th><th>Weight</th><th>Rationale</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Actors</td><td>Critical (2.0×)</td><td>Misidentified stakeholders corrupt every downstream decision.</td></tr>
+          <tr><td>Motivation</td><td>Critical (2.0×)</td><td>Wrong success metric makes the work valid but useless.</td></tr>
+          <tr><td>Bounds</td><td>Critical (2.0×)</td><td>Scope ambiguity is the leading cause of Arc failure.</td></tr>
+          <tr><td>Frame</td><td>Critical (2.0×)</td><td>Misaligned problem statement propagates through all phases.</td></tr>
+          <tr><td>Constraints</td><td>Important (1.0×)</td><td>Known limits shape feasibility; gaps create late-breaking blockers.</td></tr>
+          <tr><td>Temporality</td><td>Important (1.0×)</td><td>Timing ambiguity prevents sequencing and milestone commitment.</td></tr>
+          <tr><td>Location</td><td>Important (1.0×)</td><td>System/environment ambiguity blocks EXECUTOR readiness.</td></tr>
+          <tr><td>Anchors</td><td>Important (1.0×)</td><td>Missing reference material forces agents to hallucinate or stall.</td></tr>
+          <tr><td>Semiotics</td><td>Nice-to-have (0.5×)</td><td>Glossary gaps cause friction but rarely block execution.</td></tr>
+          <tr><td>Environment</td><td>Nice-to-have (0.5×)</td><td>Contextual risk scan adds value without being gate-critical.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s6-2">6.2 Fidelity by Module</h2>
+    <p>Each Execution Module has minimum fidelity requirements per prompt. Falling below the required fidelity for an active Module triggers a Stabilize intervention—either a request for additional context or a resequencing that delays the Module until fidelity is sufficient.</p>
+    <p>The full fidelity matrix is maintained in the Context Schema library. The high-level pattern is: POLYMATH requires Directional on most prompts; ALCHEMIST and ARCHITECT elevate to Detailed and Exact on the critical prompts; EXECUTOR and HORIZON require Exact across all critical and important prompts.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 7 -->
+  <section id="s7">
+    <h1>7. Arc, Payload, and Slate</h1>
+    <p>As Execution Modules complete their work, Resonant assembles their outputs into a Context Arc. The Arc is the live record of the execution: every Module's current state, the coherence score, observed dissonance points, and a running history of CEQ snapshots.</p>
+    <p>An Arc resolves into one of two outcomes:</p>
+    <div class="callout">Coherent Arc → Context Payload (delivered).<br>Incoherent Arc → Context Slate (logged, with salvage notes).</div>
+
+    <h2 id="s7-1">7.1 Context Payload</h2>
+    <p>A Context Payload is a successfully resolved Arc. It records the final state of every Module, the delivered outcome, and the timestamp. Payloads feed the calibration loop: the CEQ histories within them are the primary signal for tuning weights and band thresholds.</p>
+
+    <h2 id="s7-2">7.2 Context Slate</h2>
+    <p>A Context Slate is a first-class output. It is not an error log. It is a structured knowledge artifact produced when an Arc cannot reach coherence, and it is as important to Resonant's long-term function as a Payload.</p>
+    <p>A Slate contains:</p>
+    <ul>
+      <li>Which Modules achieved internal coherence and are therefore salvageable for a retry.</li>
+      <li>Where dissonance occurred and which Module Spec incompatibilities caused it.</li>
+      <li>CEQ snapshots prior to each significant event in the failed execution.</li>
+      <li>Recommended retry conditions: what would need to be true for a subsequent attempt to succeed.</li>
+      <li>Archive references linking this Slate to prior attempts on related Arcs.</li>
+    </ul>
+    <p>Slates prevent the most expensive failure pattern in multi-agent systems: the complete loss of work and context when an execution fails. By preserving what was coherent and diagnosing what was not, the system gets smarter with each failure rather than simply resetting.</p>
+
+    <h2 id="s7-3">7.3 Equilibrium Interventions</h2>
+    <p>Before an Arc fails, the EQ Engine applies a graduated sequence of interventions based on the signals it is reading.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Signal</th><th>Intervention</th><th>Trigger Condition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Minor drift</td><td>Feedback to agent</td><td>Module slightly off; agent can self-correct without pausing execution.</td></tr>
+          <tr><td>Confidence drop</td><td>Adjust downstream parameters</td><td>Lower autonomy for next Module; tighten its operating parameters.</td></tr>
+          <tr><td>Value misalignment</td><td>Halt and checkpoint</td><td>Module output conflicts with system constraints or operator intent.</td></tr>
+          <tr><td>Cross-module dissonance</td><td>Resequence</td><td>Upstream Module has not delivered what downstream Module's Spec requires.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 8 -->
+  <section id="s8">
+    <h1>8. Autonomy as CEQ-Derived</h1>
+    <p>Autonomy in Resonant is not a setting. It is a continuously recalculated output of the CEQ score. The system earns the right to act independently by demonstrating that it understands its own state well enough to be trusted with the next action.</p>
+    <p>Autonomy levels (L0–L3) map to CEQ bands with hysteresis:</p>
+    <ul>
+      <li><strong>L3 — Full autonomous execution:</strong> Stable band (CEQ 80–100). The system proceeds without operator involvement unless it encounters a pre-specified checkpoint.</li>
+      <li><strong>L2 — Supervised execution:</strong> Watch band (60–79). The system executes but surfaces decisions for passive operator awareness.</li>
+      <li><strong>L1 — Constrained execution:</strong> Constrain band (40–59). The system requests confirmation before significant actions. Downstream Module parameters tightened.</li>
+      <li><strong>L0 — Operator-driven:</strong> Pause band (&lt;40). The system halts and waits for explicit operator direction before resuming.</li>
+    </ul>
+    <p>The hysteresis rule prevents the system from oscillating between autonomy levels when the CEQ score is near a band boundary. A score must remain in a higher band for a minimum hold period before autonomy is expanded. Autonomy reduction, however, is immediate.</p>
+    <p>This asymmetry is intentional. The cost of over-trusting a deteriorating system state is higher than the cost of briefly under-trusting a recovering one.</p>
+    <div class="callout">Autonomy is the practical output of trust accounting. A system that cannot tell you why it is operating at a given autonomy level is not a trustworthy system.</div>
+    <p>Operators may override autonomy levels at any time. Overrides are logged with a rationale field, and their outcomes feed back into the calibration loop. Patterns in override behaviour surface as candidate updates to the band thresholds—a human expressing consistent confidence at what the system treats as a Watch state is signal that the Watch threshold may be miscalibrated.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 9 -->
+  <section id="s9">
+    <h1>9. Failure Modes</h1>
+    <p>Understanding how Resonant can fail is as important as understanding how it succeeds. Five primary failure modes are identified.</p>
+
+    <h3>Dissonance Between Modules</h3>
+    <p>Module Spec incompatibilities accumulate faster than the EQ Engine can resolve them. The Arc becomes incoherent before any single intervention can stabilise it. Primary mitigation: early fidelity requirements in the Context Matrix, caught by BASIS before Execution Modules begin.</p>
+
+    <h3>Operator Fadeout</h3>
+    <p>MIND detects cognitive load or context-switching that exceeds the operational threshold, but the operator does not respond to checkpoint requests. The Arc stalls. Primary mitigation: escalating EQ Directive urgency, with automatic Slate generation after a defined timeout.</p>
+
+    <h3>CEQ Collapse</h3>
+    <p>Structural and coherence components deteriorate simultaneously—typically when a Critical context prompt is unresolvable mid-execution. The system cannot recover autonomously. Primary mitigation: Context Matrix coverage gates at the start of each Arc to catch Critical prompt gaps before execution begins.</p>
+
+    <h3>Time-Box Exhaustion</h3>
+    <p>Execution reaches a deadline with an incomplete Arc. The Arc cannot be delivered as a Payload. Primary mitigation: Temporality prompts in the Context Matrix, which force explicit deadline commitment at the start of execution; mid-Arc resequencing when time pressure mounts.</p>
+
+    <h3>HORIZON Rejection</h3>
+    <p>The final review agent determines that the Arc's output does not meet acceptance criteria. The Arc is not delivered. Primary mitigation: HORIZON's Module Spec requirements are visible to ARCHITECT and EXECUTOR from the beginning of their phases, so the acceptance criteria are never a surprise.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 10 -->
+  <section id="s10">
+    <h1>10. Open Questions</h1>
+    <p>This document is canon, not gospel. The following questions remain open and are the highest-priority items for design development.</p>
+    <ul>
+      <li>What telemetry should Modules emit beyond confidence scores and Module Spec declarations? The EQ Engine's Listen phase is only as good as the signals available to it. This is the load-bearing open question.</li>
+      <li>What is the complete structure of an EQ Directive payload? Fields, priority levels, retry logic, and acknowledgement protocols need to be fully specified.</li>
+      <li>How do Context Slate learnings flow back into Module Specs? Should lessons update per-module specifications locally, or contribute to a global heuristic pool shared across all instances?</li>
+      <li>What operator agency mechanisms are required? Can humans override Stabilize decisions, and how is that logged and surfaced in the calibration loop?</li>
+      <li>Is an explicit Task Profile concept needed for mission intent, or are module-driven heuristics sufficient to capture the task-level context that affects weighting policy?</li>
+    </ul>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 11 -->
+  <section id="s11">
+    <h1>11. Quick Reference</h1>
+
+    <h2>Terminology</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Resonant</td><td>The orchestration and trust accounting layer blending all Modules into coherence.</td></tr>
+          <tr><td>Context Module</td><td>BASIS and MIND—continuous telemetry channels (venue and performer).</td></tr>
+          <tr><td>Execution Module</td><td>POLYMATH/ALCHEMIST/ARCHITECT/EXECUTOR/HORIZON—sequential work agents.</td></tr>
+          <tr><td>Module Spec</td><td>Trust contract per Module: inputs, outputs, assumptions, dependencies.</td></tr>
+          <tr><td>Context Arc</td><td>Live combined state of every active Module during an execution.</td></tr>
+          <tr><td>Context Payload</td><td>Delivered Arc—successful outcome.</td></tr>
+          <tr><td>Context Slate</td><td>Failed Arc snapshot with salvage notes and retry conditions.</td></tr>
+          <tr><td>Context Equilibrium (CEQ)</td><td>Live trust score (0–100) combining structural, operational, and coherence signals.</td></tr>
+          <tr><td>EQ Engine</td><td>Resonant's Listen → Calibrate → Stabilize → Relay loop.</td></tr>
+          <tr><td>EQ Directive</td><td>Instruction broadcast to Modules: autonomy shift, resequence, halt, feedback.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>CEQ Band Policy</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Band</th><th>Score</th><th>Autonomy Level</th><th>EQ Engine Mode</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stable</td><td>80–100</td><td>L3 — Full</td><td>Observe</td></tr>
+          <tr><td>Watch</td><td>60–79</td><td>L2 — Supervised</td><td>Feedback directives active</td></tr>
+          <tr><td>Constrain</td><td>40–59</td><td>L1 — Constrained</td><td>Parameter tightening + operator notification</td></tr>
+          <tr><td>Pause</td><td>&lt;40</td><td>L0 — Operator-driven</td><td>Halt; await explicit operator direction</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Module Spec Template</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>inputs_required</td><td>Context prompts and fidelity levels the Module needs to begin.</td></tr>
+          <tr><td>outputs_promised</td><td>Artifacts and fidelity levels the Module commits to deliver.</td></tr>
+          <tr><td>assumptions</td><td>Conditions the Module assumes to be true about the system state.</td></tr>
+          <tr><td>dependencies</td><td>Other Modules or data sources the Module relies on mid-execution.</td></tr>
+          <tr><td>freshness</td><td>Timestamp of the Module Spec's last update.</td></tr>
+          <tr><td>risk_flags</td><td>Known conditions that would degrade this Module's output quality.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="footer">
+    Resonant &nbsp;·&nbsp; Internal Design Canon v1.0 &nbsp;·&nbsp; Confidential
+  </div>
+
+</div>
+</body>
+</html>
